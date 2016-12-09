@@ -18,8 +18,6 @@ func main() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
-	fmt.Println("vim-go")
-	fmt.Printf("filename: %q, size %d mb\n", *filename, *maxSize)
 
 	f, err := os.Create(*filename)
 	if err != nil {
