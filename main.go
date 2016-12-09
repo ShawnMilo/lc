@@ -57,7 +57,7 @@ func replaceF(filename string, handle *os.File) (*os.File, error) {
 	if err != nil {
 		fmt.Printf("error closing %q: %s\n", err)
 	}
-	stamp := time.Now().Format("2006-01-02_150405")
+	stamp := time.Now().Format("2006-01-02_150405.00000")
 	ext := filepath.Ext(filename)
 	name := fmt.Sprintf("%s_%s%s", filename[:len(filename)-len(ext)], stamp, ext)
 	err = os.Rename(filename, name)
