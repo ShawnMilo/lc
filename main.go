@@ -19,6 +19,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	// if file already exists, rename before overwiting
+	_ = renameFile(*filename)
+
 	f, err := os.Create(*filename)
 	if err != nil {
 		fmt.Printf("failed to open %q: %s\n", err)
@@ -57,12 +60,13 @@ func replaceF(filename string, handle *os.File) (*os.File, error) {
 	if err != nil {
 		fmt.Printf("error closing %q: %s\n", err)
 	}
+	renameFile(filename)
+	return os.Create(filename)
+}
+
+func renameFile(filename string) error {
 	stamp := time.Now().Format("2006-01-02_150405.00000")
 	ext := filepath.Ext(filename)
 	name := fmt.Sprintf("%s_%s%s", filename[:len(filename)-len(ext)], stamp, ext)
-	err = os.Rename(filename, name)
-	if err != nil {
-		fmt.Printf("error renaming %q: %s\n", err)
-	}
-	return os.Create(filename)
+	return os.Rename(filename, name)
 }
