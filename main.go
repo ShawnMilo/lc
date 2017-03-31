@@ -24,7 +24,7 @@ func main() {
 
 	f, err := os.Create(*filename)
 	if err != nil {
-		fmt.Printf("failed to open %q: %s\n", err)
+		fmt.Printf("failed to open %q: %s\n", *filename, err)
 		os.Exit(1)
 	}
 
@@ -34,14 +34,14 @@ func main() {
 		if len(scn.Text()) > remaining {
 			f, err = replaceF(*filename, f)
 			if err != nil {
-				fmt.Printf("failed to cycle to %q: %s\n", err)
+				fmt.Printf("failed to cycle: %s\n", err)
 				os.Exit(1)
 			}
 			remaining = *maxSize * 1024 * 1024
 		}
 		n, err := fmt.Fprintln(f, scn.Text())
 		if err != nil {
-			fmt.Printf("failed to write to %q: %s\n", err)
+			fmt.Printf("failed to write: %s\n", err)
 			os.Exit(1)
 		}
 		remaining -= n
@@ -54,11 +54,11 @@ func main() {
 func replaceF(filename string, handle *os.File) (*os.File, error) {
 	err := handle.Sync()
 	if err != nil {
-		fmt.Printf("failed to sync %q: %s\n", err)
+		fmt.Printf("failed to sync %q: %s\n", filename, err)
 	}
 	err = handle.Close()
 	if err != nil {
-		fmt.Printf("error closing %q: %s\n", err)
+		fmt.Printf("error closing %q: %s\n", filename, err)
 	}
 	renameFile(filename)
 	return os.Create(filename)
